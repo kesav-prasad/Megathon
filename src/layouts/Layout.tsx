@@ -23,20 +23,20 @@ const Sidebar = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (val: bool
     { name: 'Expiry Alerts', path: `${basePath}/expiry`, icon: AlertTriangle },
     { name: 'Return Tracking', path: `${basePath}/returns`, icon: RefreshCw },
     { name: 'Reverse Logistics', path: `${basePath}/logistics`, icon: Truck },
-    { name: 'Supply Reports', path: `${basePath}/reports`, icon: FileText },
+    { name: 'Receipts', path: `${basePath}/receipts`, icon: FileText },
     { name: 'Audit Trail', path: `${basePath}/audit`, icon: History },
     { name: 'Billing POS', path: `${basePath}/billing`, icon: FileText },
-    { name: 'Reports', path: `${basePath}/reports`, icon: BarChart3 },
+    { name: 'Receipts', path: `${basePath}/receipts`, icon: FileText },
     { name: 'Request Stock', path: `${basePath}/request-stock`, icon: Package },
     { name: 'Stock Requests', path: `${basePath}/stock-requests`, icon: Package },
   ];
 
   const filteredNavItems = navItems.filter(item => {
     if (userRole === 'pharmacy') {
-      return ['Dashboard', 'QR Scanner', 'Billing POS', 'Medicine Batches', 'Return Tracking', 'Request Stock', 'Expiry Alerts', 'Reports'].includes(item.name);
+      return ['Dashboard', 'QR Scanner', 'Billing POS', 'Medicine Batches', 'Return Tracking', 'Request Stock', 'Expiry Alerts', 'Receipts'].includes(item.name);
     }
     if (userRole === 'distributor') {
-      return ['Dashboard', 'Medicine Batches', 'QR Scanner', 'Supply Reports', 'Return Tracking', 'Stock Requests', 'Expiry Alerts'].includes(item.name);
+      return ['Dashboard', 'Medicine Batches', 'QR Scanner', 'Receipts', 'Return Tracking', 'Stock Requests', 'Expiry Alerts'].includes(item.name);
     }
     return true;
   });
