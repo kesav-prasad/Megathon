@@ -83,8 +83,21 @@ const Reports = () => {
     if (!recipientId.trim()) return;
     if (!printRef.current || !profile) return;
     
+
     // Grab the exact HTML of the report
+    // Fix for React inputs: explicitly set the value attribute so innerHTML captures it
+    const inputs = printRef.current.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => {
+      if (input.type === 'checkbox' || input.type === 'radio') {
+        if (input.checked) input.setAttribute('checked', 'checked');
+        else input.removeAttribute('checked');
+      } else {
+        input.setAttribute('value', input.value);
+      }
+    });
+    
     const htmlContent = printRef.current.innerHTML;
+
     
     shareReport(recipientId, `MFR Report - ${reportDate}`, htmlContent, profile);
     
