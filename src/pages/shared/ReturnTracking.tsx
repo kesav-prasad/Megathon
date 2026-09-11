@@ -249,6 +249,7 @@ export const ReturnTracking = () => {
     const r = selectedReturn;
     const isPharmacy = profile?.role === 'pharmacy';
     const isDistributor = profile?.role === 'distributor';
+  const isDisposal = profile?.role === 'disposal';
     const isManufacturer = profile?.role === 'manufacturer';
 
     return (
@@ -405,6 +406,20 @@ export const ReturnTracking = () => {
                     </div>
                   )}
                   {isManufacturer && r.status === 'DESTROYED' && (
+                    <div className="w-full bg-slate-50 border border-slate-200 text-slate-800 p-4 rounded-xl flex flex-col items-center justify-center gap-2 text-center">
+                      <CheckCircle size={24} className="text-emerald-500" />
+                      <div>
+                        <p className="font-bold">Destruction Verified</p>
+                        <p className="text-xs mt-1">The Disposal Facility has verified and executed the destruction.</p>
+                      </div>
+                    </div>
+                  )}
+                  {isDisposal && r.status === 'AWAITING_DESTRUCTION' && (
+                    <button onClick={() => handleAction('DESTROYED', 'DESTROYED')} disabled={actionLoading} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95">
+                      <Trash2 size={20} /> COMPLETE DESTRUCTION
+                    </button>
+                  )}
+                  {isDisposal && r.status === 'DESTROYED' && (
                     <button onClick={() => handleAction('CLOSED', 'CLOSED')} disabled={actionLoading} className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95">
                       <CheckCircle size={20} /> CLOSE RETURN RECORD
                     </button>

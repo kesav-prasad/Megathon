@@ -131,6 +131,7 @@ function App() {
               <Route element={<DisposalLayout />}>
                 <Route index element={<Navigate to="destruction" replace />} />
                 <Route path="destruction" element={<Destruction />} />
+                <Route path="returns" element={<ReturnTracking />} />
                 <Route path="*" element={<Navigate to="destruction" replace />} />
               </Route>
             </Route>

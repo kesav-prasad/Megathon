@@ -9,7 +9,8 @@ const Sidebar = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (val: bool
   const { signOut } = useAuth();
   
   const navItems = [
-    { icon: Flame, label: 'Destruction Workflow', path: '/disposal/destruction' }
+    { icon: Flame, label: 'Destruction Workflow', path: '/disposal/destruction' },
+    { icon: Search, label: 'Return Tracking', path: '/disposal/returns' }
   ];
 
   return (
