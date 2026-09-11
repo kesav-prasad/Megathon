@@ -6,6 +6,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import Layout from './layouts/Layout';
 import ManufacturerLayout from './layouts/ManufacturerLayout';
+import DisposalLayout from './layouts/DisposalLayout';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 
@@ -99,7 +100,7 @@ function App() {
                 <Route path="stock-requests" element={<DistributorStockRequests />} />
                 <Route path="analytics" element={<Analytics />} />
                 <Route path="notifications" element={<Notifications />} />
-                <Route path="destruction" element={<Destruction />} />
+                
                 <Route path="fraud" element={<FraudDetection />} />
                 <Route path="audit" element={<AuditTrail />} />
               </Route>

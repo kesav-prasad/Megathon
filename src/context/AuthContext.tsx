@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 
-export type UserRole = 'manufacturer' | 'distributor' | 'pharmacy';
+export type UserRole = 'manufacturer' | 'distributor' | 'pharmacy' | 'disposal';
 
 export interface UserProfile {
   id: string;
@@ -16,6 +16,16 @@ export interface UserProfile {
 }
 
 export const DEMO_PROFILES: Record<string, UserProfile> = {
+  'demo-disposal': {
+    id: 'demo-disp-id',
+    user_id: 'demo-disposal',
+    role: 'disposal',
+    full_name: 'EnviroSafe (Demo Disposal Facility)',
+    email: 'disp@demo.com',
+    organization_name: 'EnviroSafe Waste Management',
+    phone: '555-0004',
+    created_at: new Date().toISOString()
+  },
   'demo-manufacturer': {
     id: 'demo-mfr-id',
     user_id: 'demo-manufacturer',
