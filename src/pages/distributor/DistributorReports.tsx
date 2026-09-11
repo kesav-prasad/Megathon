@@ -3,12 +3,15 @@ import { FileText, Download, Filter, Search, Send, X } from 'lucide-react';
 import { getBatches, getProducts } from '../../data/db';
 import toast from 'react-hot-toast';
 import jsPDF from 'jspdf';
+import SharedReportInbox, { shareReport } from '../../components/SharedReportInbox';
+import { useAuth } from '../../context/AuthContext';
 import autoTable from 'jspdf-autotable';
 
 const DistributorReports = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [pharmacistId, setPharmacistId] = useState('');
+  const { profile } = useAuth();
   
   // Combine batches with their corresponding products
   const products = getProducts();
@@ -79,57 +82,53 @@ const DistributorReports = () => {
   };
 
   const handleSharePDF = () => {
-    if (!pharmacistId) {
-      return;
-    }
-    
-    if (filteredReports.length === 0) {
-      return;
-    }
+    if (!pharmacistId || filteredReports.length === 0 || !profile) return;
 
-    // Generate PDF
+    // Generate HTML snapshot for seamless sharing
+    let htmlContent = `
+      <div style="font-family: sans-serif; padding: 20px;">
+        <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #333;">Pharmacy Supply Dispatch Report</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="background-color: #f1f5f9; text-align: left;">
+              <th style="padding: 12px; border-bottom: 2px solid #cbd5e1;">Tracking ID</th>
+              <th style="padding: 12px; border-bottom: 2px solid #cbd5e1;">Medicine Name</th>
+              <th style="padding: 12px; border-bottom: 2px solid #cbd5e1;">Batch No.</th>
+              <th style="padding: 12px; border-bottom: 2px solid #cbd5e1;">Destination</th>
+              <th style="padding: 12px; border-bottom: 2px solid #cbd5e1;">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filteredReports.map(r => `
+              <tr>
+                <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; font-family: monospace;">${r.id}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">${r.medicineName}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">${r.batchNumber}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">${r.pharmacy}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">${new Date(r.date).toLocaleDateString()}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    shareReport(pharmacistId, 'Dispatch Report', htmlContent, profile);
+
+    toast.success('Report seamlessly shared to ' + pharmacistId);
+    setIsShareModalOpen(false);
+    setPharmacistId('');
+
+    // Original PDF logic...
     const doc = new jsPDF();
-    
     doc.setFontSize(18);
     doc.text('Pharmacy Supply Dispatch Report', 14, 22);
-    
     doc.setFontSize(11);
-    doc.setTextColor(100);
-    doc.text(`Generated Date: ${new Date().toLocaleDateString()}`, 14, 30);
-    doc.text(`Sent To Pharmacist ID: ${pharmacistId}`, 14, 36);
-
-    const tableColumn = ["Supply ID", "Date", "Medicine", "Batch", "Destination", "Qty", "Status"];
-    const tableRows = filteredReports.map(report => [
-      report.id,
-      report.date,
-      report.medicineName,
-      report.batchNumber,
-      report.pharmacy,
-      report.quantitySupplied.toString(),
-      report.status
-    ]);
-
-    autoTable(doc, {
-      head: [tableColumn],
-      body: tableRows,
-      startY: 45,
-      theme: 'grid',
-      styles: { fontSize: 9 },
-      headStyles: { fillColor: [16, 185, 129] } // emerald-500
-    });
-
+    
     // Save/Download PDF locally
     doc.save(`Dispatch_Report_Pharm_${pharmacistId}.pdf`);
-    
-    // Send to pharmacist via system
-    const cleanId = pharmacistId.trim().toLowerCase();
-    const notifsKey = `sys_notifications_${cleanId}`;
-    const existingNotifs = JSON.parse(localStorage.getItem(notifsKey) || '[]');
-    existingNotifs.unshift({
-      type: 'blue',
-      text: `New Supply Dispatch Report shared by Distributor on ${new Date().toLocaleDateString()}.`
-    });
-    localStorage.setItem(notifsKey, JSON.stringify(existingNotifs));
+
+
 
     const reportsKey = `shared_reports_${cleanId}`;
     const existingReports = JSON.parse(localStorage.getItem(reportsKey) || '[]');

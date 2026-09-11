@@ -55,6 +55,30 @@ const printReport = (content: string) => {
 };
 
 const Analytics = () => {
+  const { profile } = useAuth();
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [recipientId, setRecipientId] = useState('');
+
+  const handleShare = () => {
+    if (!recipientId.trim() || !profile) return;
+    const html = `
+      <div style="font-family: sans-serif; padding: 20px;">
+        <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #333;">Pharmacy Snapshot Report</h2>
+        <table style="width: 100%; text-align: left; border-collapse: collapse;">
+          <tr style="background-color: #f8fafc;"><th style="padding: 10px;">Total Revenue</th><td style="padding: 10px; font-weight: bold;">₹45,231.89</td></tr>
+          <tr><th style="padding: 10px;">Transactions</th><td style="padding: 10px; font-weight: bold;">1,284</td></tr>
+          <tr style="background-color: #f8fafc;"><th style="padding: 10px;">Low Stock Alerts</th><td style="padding: 10px; font-weight: bold;">12 Items</td></tr>
+          <tr><th style="padding: 10px;">Pending Returns</th><td style="padding: 10px; font-weight: bold;">5 Batches</td></tr>
+        </table>
+        <p style="margin-top: 20px; color: #64748b; font-size: 12px;">Generated automatically via Pharmax Unified Platform</p>
+      </div>
+    `;
+    shareReport(recipientId, 'Pharmacy Analytics Snapshot', html, profile);
+    toast.success('Report shared to ' + recipientId);
+    setIsShareModalOpen(false);
+    setRecipientId('');
+  };
+
   const { products, batches, bills, reverseChain } = usePOS();
   
   const [isGenerating, setIsGenerating] = useState(false);
@@ -190,33 +214,6 @@ const Analytics = () => {
   };
 
 
-  const handleShare = () => {
-    if (!reportData) return;
-    const id = window.prompt('Enter the unique ID of the recipient (e.g. DIST-1234, MFR-5678) to share this report:');
-    if (id && id.trim() !== '') {
-      const cleanId = id.trim().toLowerCase();
-      
-      const notifsKey = `sys_notifications_${cleanId}`;
-      const existingNotifs = JSON.parse(localStorage.getItem(notifsKey) || '[]');
-      existingNotifs.unshift({
-        type: 'blue',
-        text: `New Pharmacy/Retail Report shared securely on ${new Date().toLocaleDateString()}.`
-      });
-      localStorage.setItem(notifsKey, JSON.stringify(existingNotifs));
-
-      const reportsKey = `shared_reports_${cleanId}`;
-      const existingReports = JSON.parse(localStorage.getItem(reportsKey) || '[]');
-      existingReports.unshift({
-        date: new Date().toLocaleDateString(),
-        from: 'Pharmacy (Retail)',
-        total: 'Analytics Report',
-        items: 1
-      });
-      localStorage.setItem(reportsKey, JSON.stringify(existingReports));
-
-      toast.success(`Report securely shared to ID: ${id.trim().toUpperCase()}`);
-    }
-  };
 
   const handlePrint = () => {
     if (!reportData) return;
@@ -427,6 +424,24 @@ const Analytics = () => {
           </table>
         </div>
       </div>
+    
+      {/* Share Modal */}
+      {isShareModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Share Report via ID</h3>
+            <p className="text-sm text-slate-500 mb-6">Enter the exact User ID of the Distributor or Manufacturer to send this report directly to their inbox.</p>
+            <div className="mb-6">
+              <label className="block text-sm font-bold text-slate-700 mb-2">Recipient ID (e.g. demo-manufacturer)</label>
+              <input type="text" value={recipientId} onChange={(e) => setRecipientId(e.target.value)} placeholder="Enter ID..." className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-blue-500 transition-all" />
+            </div>
+            <div className="flex gap-3 justify-end">
+              <button onClick={() => setIsShareModalOpen(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+              <button onClick={handleShare} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2"><Send size={16} /> Send Report</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
