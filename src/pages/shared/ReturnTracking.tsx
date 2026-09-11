@@ -26,14 +26,8 @@ export const ReturnTracking = () => {
     // Add real-time sync across tabs
     window.addEventListener('storage', fetchReturns);
     
-    // Fallback polling for robust demo
-    const interval = setInterval(() => {
-      fetchReturns();
-    }, 3000);
-    
     return () => {
       window.removeEventListener('storage', fetchReturns);
-      clearInterval(interval);
     };
   }, [profile]);
 
