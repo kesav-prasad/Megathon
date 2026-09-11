@@ -46,6 +46,7 @@ import EBillView from './pages/EBillView';
 import DistributorReports from './pages/distributor/DistributorReports';
 import PharmacyRequestStock from './pages/pharmacy/RequestStock';
 import DistributorStockRequests from './pages/distributor/StockRequests';
+import Infographic from './pages/Infographic';
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
         <BrowserRouter>
           <Toaster position="top-right" />
           <Routes>
+          <Route path="/infographic" element={<Infographic />} />
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/e-bill" element={<EBillView />} />
