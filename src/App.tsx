@@ -5,7 +5,6 @@ import { POSProvider } from './context/POSContext';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import Layout from './layouts/Layout';
-import Receipts from './pages/shared/Receipts';
 import ManufacturerLayout from './layouts/ManufacturerLayout';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
@@ -72,7 +71,7 @@ function App() {
                 <Route path="scan-verify" element={<MfrScanVerify />} />
                 <Route path="expiry-alerts" element={<MfrExpiryAlerts />} />
                 <Route path="activity" element={<MfrSalesActivity />} />
-                <Route path="receipts" element={<Receipts />} />
+                <Route path="reports" element={<MfrReports />} />
                 <Route path="returns" element={<ReturnTracking />} />
 
                 <Route path="add-customer" element={<MfrAddCustomer />} />
@@ -94,7 +93,7 @@ function App() {
                 <Route path="returns" element={<ReturnTracking />} />
                 <Route path="create-return" element={<CreateReturn />} />
                 <Route path="logistics" element={<Logistics />} />
-                <Route path="receipts" element={<Receipts />} />
+                <Route path="reports" element={<DistributorReports />} />
                 <Route path="stock-requests" element={<DistributorStockRequests />} />
                 <Route path="analytics" element={<Analytics />} />
                 <Route path="notifications" element={<Notifications />} />
@@ -118,7 +117,7 @@ function App() {
                 <Route path="request-stock" element={<PharmacyRequestStock />} />
                 <Route path="logistics" element={<Logistics />} />
                 <Route path="billing" element={<Billing />} />
-                <Route path="receipts" element={<Receipts />} />
+                <Route path="reports" element={<Analytics />} />
                 <Route path="notifications" element={<Notifications />} />
 
               </Route>
