@@ -402,9 +402,13 @@ export const ReturnTracking = () => {
                     </button>
                   )}
                   {isManufacturer && r.status === 'AWAITING_DESTRUCTION' && (
-                    <button onClick={() => handleAction('DESTROYED', 'DESTROYED')} disabled={actionLoading} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95">
-                      <Trash2 size={20} /> COMPLETE DESTRUCTION
-                    </button>
+                    <div className="w-full bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-xl flex flex-col items-center justify-center gap-2 text-center">
+                      <ShieldAlert size={24} className="text-rose-500" />
+                      <div>
+                        <p className="font-bold">Awaiting Facility Execution</p>
+                        <p className="text-xs mt-1">Only the Authorized Disposal Facility can execute the final destruction.</p>
+                      </div>
+                    </div>
                   )}
                   {isManufacturer && r.status === 'DESTROYED' && (
                     <button onClick={() => handleAction('CLOSED', 'CLOSED')} disabled={actionLoading} className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95">
