@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import ExpiryNotificationBanner from '../components/ExpiryNotificationBanner';
+import NotificationPanel from '../components/NotificationPanel';
 
 const Sidebar = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (val: boolean) => void }) => {
   const location = useLocation();
@@ -151,10 +152,7 @@ const Navbar = ({ onMenuClick }: { onMenuClick: () => void }) => {
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span className="text-sm font-medium text-slate-600">System Online</span>
         </div>
-        <Link to={`${basePath}/notifications`} className="relative p-2 text-slate-400 hover:text-slate-600 transition-colors">
-          <Bell size={20} />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
-        </Link>
+        <NotificationPanel />
       </div>
     </header>
   );

@@ -94,10 +94,7 @@ const Navbar = () => {
           <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
           <span className="text-sm font-medium text-slate-600">Distributor System Online</span>
         </div>
-        <Link to="/distributor/notifications" className="relative p-2 text-slate-400 hover:text-slate-600 transition-colors">
-          <Bell size={20} />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
-        </Link>
+        <NotificationPanel />
       </div>
     </header>
   );
