@@ -22,6 +22,19 @@ export const ReturnTracking = () => {
 
   useEffect(() => {
     fetchReturns();
+    
+    // Add real-time sync across tabs
+    window.addEventListener('storage', fetchReturns);
+    
+    // Fallback polling for robust demo
+    const interval = setInterval(() => {
+      fetchReturns();
+    }, 3000);
+    
+    return () => {
+      window.removeEventListener('storage', fetchReturns);
+      clearInterval(interval);
+    };
   }, [profile]);
 
   
@@ -177,6 +190,7 @@ export const ReturnTracking = () => {
            await loadReturnDetails(refreshed);
            setReturns(prev => prev.map(r => r.id === refreshed.id ? refreshed : r));
         }
+        window.dispatchEvent(new Event('storage'));
       } else {
         // Supabase action
         const { error: updateError } = await supabase
