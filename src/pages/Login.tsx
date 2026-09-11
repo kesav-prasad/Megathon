@@ -18,17 +18,10 @@ const Login = () => {
       else if (profile.role === 'distributor') navigate('/distributor/dashboard');
       else if (profile.role === 'pharmacy') navigate('/pharmacy/dashboard');
       else if (profile.role === 'disposal') navigate('/disposal/destruction');
-      else if (profile.role === 'disposal') navigate('/disposal/destruction');
     }
   }, [session, profile, navigate]);
 
-  React.useEffect(() => {
-    if (session && profile) {
-      if (profile.role === 'manufacturer') navigate('/manufacturer/dashboard');
-      else if (profile.role === 'distributor') navigate('/distributor/dashboard');
-      else if (profile.role === 'pharmacy') navigate('/pharmacy/dashboard');
-    }
-  }, [session, profile, navigate]);
+
 
   const roles = [
     { id: 'pharmacy', title: 'Pharmacy', desc: 'Medical Shop & Retail', icon: Store },

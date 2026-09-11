@@ -125,6 +125,14 @@ function App() {
 
               </Route>
             </Route>
+          
+            {/* Disposal Routes */}
+            <Route path="/disposal" element={<ProtectedRoute allowedRoles={['disposal']} />}>
+              <Route element={<DisposalLayout />}>
+                <Route index element={<Navigate to="destruction" replace />} />
+                <Route path="destruction" element={<Destruction />} />
+              </Route>
+            </Route>
           </Routes>
         </BrowserRouter>
       </POSProvider>

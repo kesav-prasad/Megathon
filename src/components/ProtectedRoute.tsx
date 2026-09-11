@@ -31,6 +31,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) 
       return <Navigate to="/distributor/dashboard" replace />;
     } else if (profile.role === 'pharmacy') {
       return <Navigate to="/pharmacy/dashboard" replace />;
+    } else if (profile.role === 'disposal') {
+      return <Navigate to="/disposal/destruction" replace />;
     }
     // Fallback if role is somehow invalid
     return <Navigate to="/" replace />;
