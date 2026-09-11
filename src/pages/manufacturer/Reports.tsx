@@ -130,40 +130,7 @@ const Reports = () => {
           <p className="text-slate-500">Generate distribution reports for customers and export to PDF.</p>
         </div>
         <div className="flex gap-3">
-          <button 
-            onClick={() => {
-              const id = window.prompt('Enter the unique ID of the recipient to share this report:');
-              if (id && id.trim() !== '') {
-                const cleanId = id.trim().toLowerCase();
-                
-                // Add Notification
-                const notifsKey = `sys_notifications_${cleanId}`;
-                const existingNotifs = JSON.parse(localStorage.getItem(notifsKey) || '[]');
-                existingNotifs.unshift({
-                  type: 'blue',
-                  text: `New Distribution Report shared by ${selectedCustomer?.name || 'Manufacturer'} on ${reportDate}.`
-                });
-                localStorage.setItem(notifsKey, JSON.stringify(existingNotifs));
-
-                // Add Shared Report
-                const reportsKey = `shared_reports_${cleanId}`;
-                const existingReports = JSON.parse(localStorage.getItem(reportsKey) || '[]');
-                existingReports.unshift({
-                  date: reportDate,
-                  from: 'Manufacturer',
-                  total: grandTotal,
-                  items: reportItems.length
-                });
-                localStorage.setItem(reportsKey, JSON.stringify(existingReports));
-
-                toast.success(`Report securely shared to ID: ${id.trim().toUpperCase()}`);
-              }
-            }}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-share-2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
-            Share via ID
-          </button>
+          
           <button 
             onClick={handlePrint}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
