@@ -19,7 +19,7 @@ export const shareReport = (recipientId: string, title: string, htmlContent: str
     id: `shr_${Date.now()}`,
     senderId: senderProfile.user_id,
     senderRole: senderProfile.role,
-    recipientId: recipientId.trim().toLowerCase(),
+    recipientId: recipientId.trim().toLowerCase().replace(/^(distributor|pharmacy|manufacturer)$/, 'demo-$1'),
     title,
     htmlContent,
     timestamp: new Date().toISOString()
@@ -45,6 +45,7 @@ export const shareReport = (recipientId: string, title: string, htmlContent: str
 const SharedReportInbox = () => {
   const { profile } = useAuth();
   const [inbox, setInbox] = useState<SharedReport[]>([]);
+  const [sentReports, setSentReports] = useState<SharedReport[]>([]);
   const [selectedReport, setSelectedReport] = useState<SharedReport | null>(null);
 
   useEffect(() => {
@@ -53,7 +54,9 @@ const SharedReportInbox = () => {
     const fetchInbox = () => {
       const all = JSON.parse(localStorage.getItem('PHARMAX_SHARED_REPORTS') || '[]');
       const myReports = all.filter((r: SharedReport) => r.recipientId === profile.user_id.toLowerCase());
+      const mySent = all.filter((r: SharedReport) => r.senderId === profile.user_id);
       setInbox(myReports);
+      setSentReports(mySent);
     };
 
     fetchInbox();
@@ -65,31 +68,61 @@ const SharedReportInbox = () => {
     };
   }, [profile]);
 
-  if (inbox.length === 0) return null;
+
+  if (inbox.length === 0 && sentReports.length === 0) return null;
 
   return (
-    <div className="mb-8">
-      <div className="flex items-center gap-2 mb-4">
-        <Mail className="text-blue-500" />
-        <h2 className="text-xl font-bold text-slate-900">Received Reports Inbox</h2>
-        <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{inbox.length}</span>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {inbox.map(report => (
-          <div 
-            key={report.id} 
-            onClick={() => setSelectedReport(report)}
-            className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm hover:border-blue-400 cursor-pointer transition-all flex justify-between items-start"
-          >
-            <div>
-              <p className="text-xs font-bold text-blue-600 uppercase mb-1">From: {report.senderId} ({report.senderRole})</p>
-              <h3 className="font-bold text-slate-800">{report.title}</h3>
-              <p className="text-xs text-slate-500 mt-2">{new Date(report.timestamp).toLocaleString()}</p>
-            </div>
+    <div className="mb-8 space-y-6">
+      {inbox.length > 0 && (
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <Mail className="text-blue-500" />
+            <h2 className="text-xl font-bold text-slate-900">Received Reports Inbox</h2>
+            <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{inbox.length}</span>
           </div>
-        ))}
-      </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {inbox.map(report => (
+              <div 
+                key={report.id} 
+                onClick={() => setSelectedReport(report)}
+                className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm hover:border-blue-400 cursor-pointer transition-all flex justify-between items-start"
+              >
+                <div>
+                  <p className="text-xs font-bold text-blue-600 uppercase mb-1">From: {report.senderId} ({report.senderRole})</p>
+                  <h3 className="font-bold text-slate-800">{report.title}</h3>
+                  <p className="text-xs text-slate-500 mt-2">{new Date(report.timestamp).toLocaleString()}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {sentReports.length > 0 && (
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <Printer className="text-emerald-500" />
+            <h2 className="text-xl font-bold text-slate-900">My Saved / Sent Reports</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {sentReports.map(report => (
+              <div 
+                key={report.id} 
+                onClick={() => setSelectedReport(report)}
+                className="bg-slate-50 border border-slate-200 p-4 rounded-xl shadow-sm hover:border-emerald-400 cursor-pointer transition-all flex justify-between items-start"
+              >
+                <div>
+                  <p className="text-xs font-bold text-emerald-600 uppercase mb-1">Sent To: {report.recipientId}</p>
+                  <h3 className="font-bold text-slate-800">{report.title}</h3>
+                  <p className="text-xs text-slate-500 mt-2">{new Date(report.timestamp).toLocaleString()}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {selectedReport && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
