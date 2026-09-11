@@ -37,6 +37,16 @@ export const ReturnTracking = () => {
     };
   }, [profile]);
 
+  // Keep selectedReturn synced with background updates
+  useEffect(() => {
+    if (selectedReturn) {
+      const updated = returns.find(r => r.id === selectedReturn.id);
+      if (updated && updated.status !== selectedReturn.status) {
+        loadReturnDetails(updated);
+      }
+    }
+  }, [returns]);
+
   
 
   const fetchReturns = async () => {
