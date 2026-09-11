@@ -152,6 +152,7 @@ const DistributorReports = () => {
 
   return (
     <div className="space-y-6 relative">
+      <SharedReportInbox />
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-slate-900">Supply Reports</h2>

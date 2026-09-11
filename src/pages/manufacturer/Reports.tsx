@@ -107,6 +107,7 @@ const Reports = () => {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      <SharedReportInbox />
       <div className="flex justify-between items-end print:hidden">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
