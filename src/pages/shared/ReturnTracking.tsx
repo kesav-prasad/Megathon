@@ -450,9 +450,14 @@ export const ReturnTracking = () => {
               </span>
             </div>
             
+
             <h3 className="font-mono font-bold text-lg text-slate-900 mb-1 tracking-tight">{ret.tracking_id}</h3>
-            <p className="font-medium text-slate-700">{ret.medicine_name}</p>
-            <p className="text-xs text-slate-500 font-mono mb-4">Batch: {ret.batch_number}</p>
+            <p className="font-bold text-slate-800 text-lg mb-1">{ret.medicine_name}</p>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs font-mono border border-slate-200">ID: {ret.tablet_id}</span>
+              <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-mono border border-blue-100">Batch: {ret.batch_number}</span>
+            </div>
+
             
             <div className="flex justify-between items-center pt-4 border-t border-slate-100">
               <div>

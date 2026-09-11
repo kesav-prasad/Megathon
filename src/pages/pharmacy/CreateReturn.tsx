@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Package, Send, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
-import { getBatches } from '../../data/db';
+import { getBatches, getProducts } from '../../data/db';
 import toast from 'react-hot-toast';
 import { createLocalReturn, createLocalReturnEvent } from '../../data/mockReturnsDb';
 
@@ -24,39 +24,42 @@ const CreateReturn = () => {
     notes: ''
   });
 
+
   useEffect(() => {
-    // Load pharmacy batches (using local mock db for inventory as per existing setup)
+    // Load pharmacy batches and products to get real details
     const allBatches = getBatches();
-    setBatches(allBatches);
+    const allProducts = getProducts();
+    
+    // Merge product name into batches for easy display
+    const mergedBatches = allBatches.map(b => {
+      const p = allProducts.find(prod => prod.id === b.productId);
+      return {
+        ...b,
+        name: p ? p.name : 'Unknown Medicine',
+        productId: b.productId
+      };
+    });
+    
+    setBatches(mergedBatches);
   }, []);
+
+
 
   const handleBatchSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selected = batches.find(b => b.id === e.target.value);
     if (selected) {
-      // Need to extract medicine name from productId or name if available
-      // The mock db has 'productId' and 'batchNumber'. If 'name' is absent, we use a placeholder or lookup.
-      // In getBatches, product details might not be merged, but let's assume 'name' or 'productId' is available.
       setFormData({
         ...formData,
         batchId: selected.id,
-        medicineName: selected.name || 'Paracetamol 500mg', // Fallback for demo
+        medicineName: selected.name,
         batchNumber: selected.batchNumber,
-        tabletId: 'TAB-0001', // Default for demo
-        quantity: selected.quantity.toString(),
-        expiryDate: selected.expiryDate
-      });
-    } else {
-      setFormData({
-        ...formData,
-        batchId: '',
-        medicineName: '',
-        batchNumber: '',
-        tabletId: '',
-        quantity: '',
-        expiryDate: ''
+        tabletId: selected.productId,
+        expiryDate: selected.expiryDate || 'N/A',
+        quantity: selected.quantity.toString() // Pre-fill with remaining quantity
       });
     }
   };
+
 
   const generateTrackingId = () => {
     const year = new Date().getFullYear();
@@ -221,9 +224,11 @@ const CreateReturn = () => {
               className="w-full bg-slate-50 border border-slate-300 focus:border-blue-500 rounded-xl px-4 py-3 outline-none transition-colors"
             >
               <option value="" disabled>-- Select a Batch --</option>
+
               {batches.map(b => (
-                <option key={b.id} value={b.id}>{b.batchNumber} - {b.quantity} units available</option>
+                <option key={b.id} value={b.id}>{b.name} (Batch: {b.batchNumber}) - {b.quantity} units - Exp: {b.expiryDate}</option>
               ))}
+
             </select>
           </div>
 
