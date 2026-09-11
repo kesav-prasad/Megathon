@@ -131,7 +131,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginDemo = (role: UserRole) => {
     localStorage.setItem('PHARMAX_DEMO_ROLE', role);
-    window.location.href = `/${role}/dashboard`;
+    if (role === 'disposal') {
+      window.location.href = '/disposal/destruction';
+    } else {
+      window.location.href = `/${role}/dashboard`;
+    }
   };
 
   const signOut = async () => {
