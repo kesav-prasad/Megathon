@@ -101,8 +101,30 @@ const Login = () => {
           <h3 className="text-2xl font-bold text-slate-900 mb-3">Select Your Role</h3>
           <p className="text-slate-500 mb-10 max-w-lg mx-auto">Choose an environment to enter the demo system. The accounts are pre-configured and securely linked to each other.</p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                        <button 
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            <button 
+              onClick={() => window.loginDemo('manufacturer')}
+              className="flex flex-col items-center p-8 border-2 border-indigo-100 rounded-2xl hover:border-indigo-500 hover:bg-indigo-50 transition-all cursor-pointer group shadow-sm hover:shadow-md"
+            >
+              <div className="w-20 h-20 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Factory size={40} />
+              </div>
+              <h4 className="font-bold text-slate-900 text-lg mb-2">Manufacturer</h4>
+              <p className="text-sm text-slate-500">PharmaCorp Inc.</p>
+            </button>
+
+            <button 
+              onClick={() => window.loginDemo('distributor')}
+              className="flex flex-col items-center p-8 border-2 border-orange-100 rounded-2xl hover:border-orange-500 hover:bg-orange-50 transition-all cursor-pointer group shadow-sm hover:shadow-md"
+            >
+              <div className="w-20 h-20 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Truck size={40} />
+              </div>
+              <h4 className="font-bold text-slate-900 text-lg mb-2">Distributor</h4>
+              <p className="text-sm text-slate-500">Global Logistics</p>
+            </button>
+
+            <button 
               onClick={() => window.loginDemo('pharmacy')}
               className="flex flex-col items-center p-8 border-2 border-emerald-100 rounded-2xl hover:border-emerald-500 hover:bg-emerald-50 transition-all cursor-pointer group shadow-sm hover:shadow-md"
             >
