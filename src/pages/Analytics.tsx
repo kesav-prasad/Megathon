@@ -4,6 +4,9 @@ import { Download, Sparkles, FileText, Loader2, TrendingUp, Package, AlertTriang
 import toast from 'react-hot-toast';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { mockBatches } from '../data/mockData';
+import SharedReportInbox, { shareReport } from '../components/SharedReportInbox';
+import { useAuth } from '../context/AuthContext';
+import { Share2, Send } from 'lucide-react';
 
 const mockSalesData = [
   { date: 'Mon', sales: 4000, qty: 240 },
